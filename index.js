@@ -9,7 +9,7 @@ const port = 3000;
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/codeeditor.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/compile', (req, res) => {
