@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build":"buildCommand: export PATH="/path/to/jdk/bin:$PATH" && npm install"
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
