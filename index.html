@@ -1,0 +1,110 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Code Editor</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        color: #333;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+    
+    p {
+        margin-top: 15px;
+        color: red;
+    }</style>
+</head>
+<body>
+    <h1>Write your code here</h1>
+    <label for="classname">Enter the name of the class</label>
+    <input type="text" id="classname" name="classname"><br>
+    <textarea id="code" name="code" rows="20" cols="100"></textarea><br>
+    <button id="compileBtn">Compile</button>
+    <button id="runBtn">Run</button><br>
+    <p id="error"></p>
+    <p id="compileStatus"></p>
+    <p>Enter all the inputs before running the code.<br>Environment variables for jdk bin should be set in your system.</p>
+    <textarea id="input" name="input" rows="10" cols="100"></textarea><br>
+    <textarea id="output" rows="10" cols="100"></textarea>
+
+    <script>
+        document.getElementById('compileBtn').addEventListener('click', function() {
+            const code = document.getElementById('code').value.trim();
+            const className = document.getElementById('classname').value.trim();
+            fetch('/compile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code, className: className })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('compileStatus').innerText = 'Compilation successful';
+                    document.getElementById('error').innerText = ''; // Clear error message
+                } else {
+                    document.getElementById('compileStatus').innerText = 'Compilation failed';
+                    document.getElementById('error').innerText = data.error; // Display compilation error
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('runBtn').addEventListener('click', function() {
+            const input = document.getElementById('input').value.trim(); // Get input from textarea
+            const className = document.getElementById('classname').value.trim();
+            fetch('/run', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: input, className: className })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').value = data.output; // Display output in textarea
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
