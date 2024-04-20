@@ -1,2 +1,5 @@
-buildCommand:|
-  export PATH="C:\Program Files\Java\jdk-21\bin:$PATH"
+services:
+  - name: java-editor
+    type: web
+    buildCommand : export PATH="C:\Program Files\Java\jdk-21\bin:$PATH"
+    startCommand: node index.js
