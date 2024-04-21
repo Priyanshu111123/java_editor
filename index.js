@@ -6,6 +6,9 @@ const { exec } = require('child_process');
 const app = express();
 const port = 3000;
 
+// Path to JDK's bin directory
+const JDK_BIN_PATH = "C:\\Program Files\\Java\\jdk-21\\bin";
+
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
@@ -23,7 +26,7 @@ app.post('/compile', (req, res) => {
             return;
         }
 
-        exec(`javac ${className}.java`, (err, stdout, stderr) => {
+        exec(`${JDK_BIN_PATH}\\javac ${className}.java`, (err, stdout, stderr) => {
             if (err || stderr) {
                 console.error('Compilation failed:', err || stderr);
                 res.status(200).json({ success: false, error: err ? err.message : stderr }); // Send error message from exec
@@ -41,7 +44,7 @@ app.post('/run', (req, res) => {
     const className = req.body.className;
 
     // Spawn a child process for running the Java program
-    const javaProcess = exec(`java ${className}`);
+    const javaProcess = exec(`${JDK_BIN_PATH}\\java ${className}`);
 
     let output = '';
 
